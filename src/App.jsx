@@ -7,10 +7,14 @@ import Cart from "./features/cart/Cart.jsx";
 import CreateOrder from "./features/order/CreateOrder.jsx";
 import Order from "./features/order/Order.jsx";
 import AppLayout from "./ui/AppLayout.jsx";
+import Error from "./ui/Error.jsx";
+import { loader as orderLoader } from "./features/order/Order.jsx";
+import { action as createOrderAction } from "./features/order/CreateOrder.jsx";
 
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -20,6 +24,7 @@ const router = createBrowserRouter([
         path: "/menu",
         element: <Menu />,
         loader: menuLoader,
+        errorElement: <Error />,
       },
       {
         path: "/cart",
@@ -28,10 +33,13 @@ const router = createBrowserRouter([
       {
         path: "/order/new",
         element: <CreateOrder />,
+        action: createOrderAction,
       },
       {
         path: "/order/:id",
         element: <Order />,
+        loader: orderLoader,
+        errorElement: <Error />,
       },
     ],
   },
