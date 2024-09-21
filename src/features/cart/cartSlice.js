@@ -21,6 +21,7 @@ const cartSlice = createSlice({
       );
       if (existingPizza) {
         existingPizza.quantity++;
+        existingPizza.totalPrice += action.payload.unitPrice;
       } else {
         state.cart.push({ ...action.payload, quantity: 1 });
       }

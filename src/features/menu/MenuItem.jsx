@@ -2,9 +2,22 @@ import PropTypes from "prop-types";
 
 import { formatCurrency } from "../../utils/helpers";
 import Button from "../../ui/Button";
+import { useDispatch } from "react-redux";
+import { addPizzaToCart } from "../cart/cartSlice";
 
 function MenuItem({ pizza }) {
+  const dispatch = useDispatch();
   const { name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  function handleCart() {
+    const newItem = {
+      pizzaId: pizza.id,
+      name,
+      quantity: 1,
+      unitPrice,
+      totalPrice: unitPrice,
+    };
+    dispatch(addPizzaToCart(newItem));
+  }
   return (
     <li className="flex gap-4 py-2">
       <img
@@ -23,7 +36,7 @@ function MenuItem({ pizza }) {
               Sold out
             </p>
           )}
-          <Button>Add to cart</Button>
+          {!soldOut && <Button onClick={handleCart}>Add to cart</Button>}
         </div>
       </div>
     </li>
