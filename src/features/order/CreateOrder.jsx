@@ -3,6 +3,7 @@
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -36,6 +37,7 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
+  const username = useSelector((state) => state.user.username);
   const isSubmitting = navigation.state === "submitting";
   const errors = useActionData();
   const cart = fakeCart;
@@ -45,7 +47,13 @@ function CreateOrder() {
       <Form method="POST">
         <div>
           <label>First Name</label>
-          <input type="text" name="customer" required className="input" />
+          <input
+            type="text"
+            name="customer"
+            required
+            className="input"
+            defaultValue={username}
+          />
         </div>
 
         <div>
