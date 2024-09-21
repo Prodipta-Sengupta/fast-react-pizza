@@ -28,14 +28,15 @@ const cartSlice = createSlice({
     },
     removePizzaFromCart(state, action) {
       const existingPizza = state.cart.find(
-        (pizza) => pizza.pizzaId === action.payload,
+        (pizza) => pizza.pizzaId === action.payload.pizzaId,
       );
       if (existingPizza.quantity === 1) {
         state.cart = state.cart.filter(
-          (pizza) => pizza.pizzaId !== action.payload,
+          (pizza) => pizza.pizzaId !== action.payload.pizzaId,
         );
-      } else {
+      } else if (existingPizza) {
         existingPizza.quantity--;
+        existingPizza.totalPrice -= existingPizza.unitPrice;
       }
     },
     clearCart(state) {
