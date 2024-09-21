@@ -38,6 +38,9 @@ const cartSlice = createSlice({
         existingPizza.quantity--;
       }
     },
+    clearCart(state) {
+      state.cart = [];
+    },
   },
 });
 
