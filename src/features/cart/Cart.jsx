@@ -10,7 +10,7 @@ function Cart() {
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  function removeCartItem() {
+  function removeCart() {
     dispatch(clearCart());
     navigate("/menu");
   }
@@ -28,9 +28,7 @@ function Cart() {
 
       <div className="mt-6 space-x-2">
         {cart.length > 0 && <Button to="/order/new">Order pizzas</Button>}
-        {cart.length > 0 && (
-          <Button onClick={removeCartItem}>Clear cart</Button>
-        )}
+        {cart.length > 0 && <Button onClick={removeCart}>Clear cart</Button>}
       </div>
     </div>
   );
