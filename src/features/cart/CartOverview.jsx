@@ -5,6 +5,7 @@ import { formatCurrency } from "../../utils/helpers";
 function CartOverview() {
   const totalQuantity = useSelector(getTotalQuantity);
   const totalPrice = useSelector(getTotalPrice);
+  if (!totalQuantity) return null;
   return (
     <div className="jbg-stone-800 flex items-center justify-between p-4 px-4 py-4 text-sm uppercase text-stone-200 sm:px-6 md:text-base">
       <p className="space-x-4 font-semibold text-stone-300 sm:space-x-6">
