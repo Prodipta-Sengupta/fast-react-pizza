@@ -2,10 +2,12 @@
 
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
+import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str
+    str,
   );
 
 const fakeCart = [
@@ -35,6 +37,7 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
+  const username = useSelector((state) => state.user.username);
   const isSubmitting = navigation.state === "submitting";
   const errors = useActionData();
   const cart = fakeCart;
@@ -44,20 +47,26 @@ function CreateOrder() {
       <Form method="POST">
         <div>
           <label>First Name</label>
-          <input type="text" name="customer" required />
+          <input
+            type="text"
+            name="customer"
+            required
+            className="input"
+            defaultValue={username}
+          />
         </div>
 
         <div>
           <label>Phone number</label>
           <div>
-            <input type="tel" name="phone" required />
+            <input type="text" name="phone" required className="input" />
           </div>
         </div>
         <div>{errors?.phone && <p>{errors.phone}</p>}</div>
         <div>
           <label>Address</label>
           <div>
-            <input type="text" name="address" required />
+            <input type="text" name="address" required className="input" />
           </div>
         </div>
 
@@ -66,16 +75,20 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
+            className="h-6 w-6 accent-yellow-400"
             // value={withPriority}
             // onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">Want to yo give your order priority?</label>
         </div>
-        <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+        <input
+          type="hidden"
+          name="cart"
+          value={JSON.stringify(cart)}
+          className="input"
+        />
         <div>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : `Order now`}
-          </button>
+          <Button>{isSubmitting ? "Submitting..." : `Order now`}</Button>
         </div>
       </Form>
     </div>
