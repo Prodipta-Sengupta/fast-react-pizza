@@ -3,10 +3,11 @@
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../ui/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getTotalPrice } from "../cart/cartSlice";
 import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
+import { fetchAddress } from "../user/userSlice";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -16,13 +17,15 @@ const isValidPhone = (str) =>
 function CreateOrder() {
   const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
-  const username = useSelector((state) => state.user.username);
+  const { username, address, state } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const isSubmitting = navigation.state === "submitting";
   const errors = useActionData();
   const cart = useSelector((state) => state.cart.cart);
   const totalPrice = useSelector(getTotalPrice);
   const priorityPrice = withPriority ? 0.2 * totalPrice : 0;
   const total = totalPrice + priorityPrice;
+  const isLoading = state === "loading";
 
   if (cart.length === 0) {
     return (
@@ -57,8 +60,23 @@ function CreateOrder() {
         <div>
           <label>Address</label>
           <div>
-            <input type="text" name="address" required className="input" />
+            <input
+              type="text"
+              name="address"
+              required
+              className="input"
+              disabled={isLoading}
+              defaultValue={address}
+            />
           </div>
+          <Button
+            onClick={(event) => {
+              event.preventDefault();
+              dispatch(fetchAddress());
+            }}
+          >
+            Get Location
+          </Button>
         </div>
 
         <div>
