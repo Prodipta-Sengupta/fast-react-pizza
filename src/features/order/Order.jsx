@@ -7,6 +7,8 @@ import {
 } from "../../utils/helpers";
 import { getOrder } from "../../services/apiRestaurant";
 import { useLoaderData } from "react-router-dom";
+import store from "../../store";
+import { clearCart } from "../cart/cartSlice";
 // const order = {
 //   id: "ABCDEF",
 //   customer: "Jonas",
@@ -48,6 +50,8 @@ function Order() {
   const { status, priority, priorityPrice, orderPrice, estimatedDelivery } =
     order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  store.dispatch(clearCart());
 
   return (
     <div>
