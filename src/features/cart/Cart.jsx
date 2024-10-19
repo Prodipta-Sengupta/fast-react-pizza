@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CartItem from "./CartItem";
 import { clearCart } from "./cartSlice";
 import { useNavigate } from "react-router-dom";
+import EmptyCart from "./EmptyCart";
 
 function Cart() {
   const username = useSelector((state) => state.user.username);
@@ -14,6 +15,8 @@ function Cart() {
     dispatch(clearCart());
     navigate("/menu");
   }
+
+  if (cart.length === 0) return <EmptyCart />;
   return (
     <div className="px-4 py-3">
       <LinkButton to="/menu">&larr; Back to menu</LinkButton>
