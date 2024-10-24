@@ -1,7 +1,7 @@
 import { formatCurrency } from "../../utils/helpers.js";
 import PropTypes from "prop-types";
 
-function OrderItem({ item }) {
+function OrderItem({ item, isLoading, ingredients }) {
   const { quantity, name, totalPrice } = item;
 
   return (
@@ -12,6 +12,9 @@ function OrderItem({ item }) {
         </p>
         <p>{formatCurrency(totalPrice)}</p>
       </div>
+      <p className="text-sm capitalize italic text-stone-500">
+        {isLoading ? "Loading..." : ingredients.join(", ")}
+      </p>
     </li>
   );
 }
@@ -27,4 +30,6 @@ OrderItem.propTypes = {
     name: PropTypes.string.isRequired,
     totalPrice: PropTypes.number.isRequired,
   }).isRequired,
+  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
