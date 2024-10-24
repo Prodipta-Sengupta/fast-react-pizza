@@ -3,11 +3,15 @@ import { formatCurrency } from "../../utils/helpers";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { removePizzaFromCart } from "./cartSlice";
+import { addPizzaToCart } from "./cartSlice";
 function CartItem({ item }) {
   const dispatch = useDispatch();
   const { name, quantity, totalPrice } = item;
   function removeCartItem() {
     dispatch(removePizzaFromCart({ pizzaId: item.pizzaId }));
+  }
+  function addCartItem() {
+    dispatch(addPizzaToCart({ ...item, quantity: 1 }));
   }
   return (
     <li>
@@ -16,6 +20,7 @@ function CartItem({ item }) {
       </p>
       <div className="flex items-center justify-between">
         <p>{formatCurrency(totalPrice)}</p>
+        <Button onClick={addCartItem}>Add</Button>
         <Button onClick={removeCartItem}>Remove</Button>
       </div>
     </li>

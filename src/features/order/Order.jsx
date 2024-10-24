@@ -6,7 +6,11 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import { getOrder } from "../../services/apiRestaurant";
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
+import store from "../../store";
+import { clearCart } from "../cart/cartSlice";
+import OrderItem from "./OrderItem.jsx";
+import { useEffect } from "react";
 // const order = {
 //   id: "ABCDEF",
 //   customer: "Jonas",
@@ -45,14 +49,30 @@ import { useLoaderData } from "react-router-dom";
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const order = useLoaderData();
-  const { status, priority, priorityPrice, orderPrice, estimatedDelivery } =
-    order;
+
+  const fetcher = useFetcher();
+  useEffect(() => {
+    if (!fetcher.data && fetcher.state === "idle") {
+      fetcher.load("/menu");
+    }
+  }, [fetcher]);
+  const {
+    status,
+    priority,
+    priorityPrice,
+    orderPrice,
+    estimatedDelivery,
+    id,
+    cart,
+  } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+
+  store.dispatch(clearCart());
 
   return (
     <div>
       <div>
-        <h2>Status</h2>
+        <h2>Order # {id} Status</h2>
 
         <div>
           {priority && <span>Priority</span>}
@@ -68,6 +88,20 @@ function Order() {
         </p>
         <p>(Estimated delivery: {formatDate(estimatedDelivery)})</p>
       </div>
+
+      <ul>
+        {cart.map((item) => (
+          <OrderItem
+            key={item.pizzaId}
+            item={item}
+            isLoading={fetcher.state === "loading"}
+            ingredients={
+              fetcher?.data?.find((pizza) => pizza.id === item.pizzaId)
+                .ingredients ?? []
+            }
+          />
+        ))}
+      </ul>
 
       <div>
         <p>Price pizza: {formatCurrency(orderPrice)}</p>
