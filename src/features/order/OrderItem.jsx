@@ -1,4 +1,7 @@
-function OrderItem({ item, isLoadingIngredients, ingredients }) {
+import { formatCurrency } from "../../utils/helpers.js";
+import PropTypes from "prop-types";
+
+function OrderItem({ item }) {
   const { quantity, name, totalPrice } = item;
 
   return (
@@ -14,3 +17,14 @@ function OrderItem({ item, isLoadingIngredients, ingredients }) {
 }
 
 export default OrderItem;
+
+//Props validation
+// https://reactjs.org/docs/typechecking-with-proptypes.html
+
+OrderItem.propTypes = {
+  item: PropTypes.shape({
+    quantity: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    totalPrice: PropTypes.number.isRequired,
+  }).isRequired,
+};

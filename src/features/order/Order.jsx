@@ -9,6 +9,7 @@ import { getOrder } from "../../services/apiRestaurant";
 import { useLoaderData } from "react-router-dom";
 import store from "../../store";
 import { clearCart } from "../cart/cartSlice";
+import OrderItem from "./OrderItem.jsx";
 // const order = {
 //   id: "ABCDEF",
 //   customer: "Jonas",
@@ -47,8 +48,15 @@ import { clearCart } from "../cart/cartSlice";
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const order = useLoaderData();
-  const { status, priority, priorityPrice, orderPrice, estimatedDelivery } =
-    order;
+  const {
+    status,
+    priority,
+    priorityPrice,
+    orderPrice,
+    estimatedDelivery,
+    id,
+    cart,
+  } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   store.dispatch(clearCart());
@@ -56,7 +64,7 @@ function Order() {
   return (
     <div>
       <div>
-        <h2>Status</h2>
+        <h2>Order # {id} Status</h2>
 
         <div>
           {priority && <span>Priority</span>}
@@ -72,6 +80,12 @@ function Order() {
         </p>
         <p>(Estimated delivery: {formatDate(estimatedDelivery)})</p>
       </div>
+
+      <ul>
+        {cart.map((item) => (
+          <OrderItem key={item.pizzaId} item={item} />
+        ))}
+      </ul>
 
       <div>
         <p>Price pizza: {formatCurrency(orderPrice)}</p>
