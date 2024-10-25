@@ -11,6 +11,7 @@ import store from "../../store";
 import { clearCart } from "../cart/cartSlice";
 import OrderItem from "./OrderItem.jsx";
 import { useEffect } from "react";
+import UpdateOrder from "./UpdateOrder.jsx";
 // const order = {
 //   id: "ABCDEF",
 //   customer: "Jonas",
@@ -107,6 +108,7 @@ function Order() {
         <p>Price pizza: {formatCurrency(orderPrice)}</p>
         {priority && <p>Price priority: {formatCurrency(priorityPrice)}</p>}
         <p>To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+        {!priority && <UpdateOrder order={order} />}
       </div>
     </div>
   );
